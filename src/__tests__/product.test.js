@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
-import Product from "../models/Product.js";
+
+const mongoose = require("mongoose");
+const Product = require("../models/Product");
 
 describe("Product Model Test", () => {
   afterAll(async () => {
