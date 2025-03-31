@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const productRoutes = require('./routes/productsRoutes');
-const authRoutes = require('./routes/authRoutes');
-const connectDb = require('./config/dbConnection');
-const apiDocs = require('./routes/apiDocs');
+require('dotenv').config();
+const productRoutes = require('./src/routes/productsRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const connectDb = require('./src/config/dbConnection');
+const apiDocs = require('./src/routes/apiDocs');
 
-dotenv.config();
+
 connectDb();
 
 

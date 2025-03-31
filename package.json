@@ -2,8 +2,8 @@
   "name": "hakim-livs-backend",
   "version": "1.0.0",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js", 
+    "start": "node index.js",
+    "dev": "nodemon index.js", 
     "test": "jest",
     "test:watch": "jest --watch"
   },
