@@ -1,34 +1,39 @@
 const Product = require("../models/productModel");
+const mongoose = require("mongoose");
+const Category = require("../models/categoryModel");
 
-//@desc  Get all products or filter by category
+//@desc  Get all products
 //@route GET /api/products
 //@access public
 const getProducts = async (req, res) => {
   try {
-    const { category } = req.query;
-    let filter = {};
-    
-    if (category) filter.category = category; 
-
-    const products = await Product.find(filter);
+    const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
 
-//@desc  Create new product
+//@desc  Create new product with category validation
 //@route POST /api/products
 //@access admin
 const createProduct = async (req, res) => {
   try {
-    const { name, category, price, description, brand } = req.body;
-    if (!name || !category || !price || !brand || !description) {
-      return res.status(400).json({ message: "Name, category, price, and brand are required" });
+    const data = Array.isArray(req.body) ? req.body : [req.body];
+
+    for (const product of data) {
+      if (!mongoose.Types.ObjectId.isValid(product.category)) {
+        return res.status(400).json({ message: "Invalid category ID" });
+      }
+
+      const categoryExists = await Category.findById(product.category);
+      if (!categoryExists) {
+        return res.status(404).json({ message: "Category not found" });
+      }
     }
 
-    const product = await Product.create({ name, category, price, description, brand });
-    res.status(201).json(product);
+    const products = await Product.insertMany(data);
+    res.status(201).json(products);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -59,7 +64,11 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
