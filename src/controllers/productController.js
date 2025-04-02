@@ -22,6 +22,18 @@ const createProduct = async (req, res) => {
     const data = Array.isArray(req.body) ? req.body : [req.body];
 
     for (const product of data) {
+      if (
+        !product.name ||
+        !product.category ||
+        !product.price ||
+        !product.description ||
+        !product.brand ||
+        !product.stock ||
+        !product.img
+      ) {
+        return res.status(400).json({ message: "All fields required" });
+      }
+
       if (!mongoose.Types.ObjectId.isValid(product.category)) {
         return res.status(400).json({ message: "Invalid category ID" });
       }
@@ -35,7 +47,12 @@ const createProduct = async (req, res) => {
     const products = await Product.insertMany(data);
     res.status(201).json(products);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    if (error.code === 11000) {
+      res.status(400).json({ message: "Product already exist" });
+    } else {
+      res.status(500).json({ message: "Server error" });
+      console.log(error);
+    }
   }
 };
 
