@@ -1,6 +1,15 @@
 const Category = require("../models/categoryModel");
 const Product = require("../models/productModel");
 
+const getCategory = async (req, res) => {
+  try {
+    const Categories = await Category.find();
+    res.status(200).json(Categories);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 //@desc  Get and filter by category
 //@route GET /api/products/category/:id
 //@access public
@@ -13,7 +22,8 @@ const getProductsByCategory = async (req, res) => {
     }
 
     const products = await Product.find({ category: category._id }).populate(
-      "category"
+      "category",
+      "name"
     );
 
     res.status(200).json(products);
@@ -88,4 +98,5 @@ module.exports = {
   updateCategory,
   deleteCategory,
   getProductsByCategory,
+  getCategory,
 };
