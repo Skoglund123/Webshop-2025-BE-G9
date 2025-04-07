@@ -7,14 +7,14 @@ const User = require("../models/UserModel");
 //@access User
 const registerUser = async (req, res) => {
   try {
-    const { username, password, isAdmin } = req.body;
+    const { email, password, isAdmin } = req.body;
 
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Username already taken" });
+      return res.status(400).json({ message: "User already exist" });
     }
 
-    const newUser = new User({ username, password, isAdmin });
+    const newUser = new User({ email, password, isAdmin });
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully" });
@@ -30,9 +30,9 @@ const registerUser = async (req, res) => {
 //@access Admin
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }

@@ -3,11 +3,10 @@ const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    email: {
       type: String,
       required: true,
       unique: true,
-      trim: true,
     },
     password: {
       type: String,
@@ -31,8 +30,8 @@ userSchema.pre("save", async function (next) {
 });
 
 // Method to compare passwords
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(String(enteredPassword), this.password);
 };
 
 module.exports = mongoose.model("User", userSchema);
