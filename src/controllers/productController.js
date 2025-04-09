@@ -29,7 +29,12 @@ const createProduct = async (req, res) => {
         !product.description ||
         !product.brand ||
         !product.stock ||
-        !product.img
+        !product.img ||
+        !product.supplier ||
+        !product.quantity ||
+        !product.comparePrice ||
+        !product.ingredients ||
+        !product.nutrition
       ) {
         return res.status(400).json({ message: "All fields required" });
       }

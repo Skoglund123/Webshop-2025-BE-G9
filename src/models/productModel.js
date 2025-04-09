@@ -4,7 +4,6 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true,
       required: true,
       trim: true,
     },
@@ -35,6 +34,31 @@ const productSchema = new mongoose.Schema(
     img: {
       type: String,
       default: "",
+    },
+    supplier: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    quantity: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    comparePrice: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    ingredients: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    nutrition: {
+      type: String,
+      required: true,
+      trim: true,
     },
   },
   {
